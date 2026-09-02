@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Madam Ji</title>
+<style>
+/* Body & background gradient animation */
+body {
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background: linear-gradient(270deg,#ff33cc,#33ccff,#ffcc00,#33ff99,#6600ff,#ff3399,#06f,#8ff);
+  background-size: 1400% 1400%;
+  animation: bgGradient 15s ease infinite;
+}
+@keyframes bgGradient {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Particle container */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.particle {
+  position: absolute;
+  font-size: 300px;
+  animation: floatUp 8s linear forwards;
+  opacity: 0.9;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) scale(1); opacity: 1; }
+  100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+}
+
+/* Container + quote box + send button */
+.container {
+  background:#fff;
+  padding:25px;
+  border-radius:15px;
+  width:500px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,0,0,0.2);
+  z-index:2;
+  position:relative;
+  transition: opacity 1s ease;
+}
+.quote-box {
+  font-size:18px;
+  color:#444;
+  height:300px;
+  overflow:auto;
+  white-space: pre-wrap;
+  text-align:left;
+  border:2px dashed #ff6f91;
+  border-radius:10px;
+  padding:15px;
+  margin-bottom:20px;
+}
+#sendBtn {
+  padding:10px 25px;
+  font-size:18px;
+  background:#ff6f91;
+  border:none;
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
+}
+#sendBtn:hover{ background:#ff3f6f; }
+
+/* Celebration text */
+.celebration {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) scale(4);
+  font-size: 65px;
+  font-weight: bold;
+  text-align: center;
+  display: none;
+  z-index: 5;
+
+  /* Fixed Rainbow Gradient */
+  background: linear-gradient(90deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#8f00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Zoom out animation */
+  animation: zoomOut 6s ease forwards;
+}
+@keyframes zoomOut {
+  0% {transform: translate(-50%,-50%) scale(4); opacity:0;}
+  20% {opacity:1;}
+  100% {transform: translate(-50%,-50%) scale(1);}
+}
+
+/* --- bottom watch box (fixed) --- */
+  .watch-box{
+    display:none;
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:30px;
+    width:92%;
+    max-width:480px;
+    background: rgba(0,0,0,0.68);
+    border-radius:12px;
+    padding:18px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.35);
+    color:#fff;
+    z-index:9999; /* on top */
+    text-align:center;
+    font-size:20px;
+    font-weight:700;
+    backdrop-filter: blur(6px);
+  }
+
+  .watch-buttons{
+    margin-top:12px;
+    display:flex;
+    justify-content:center;
+    gap:14px;
+  }
+
+  /* BIG buttons — change these values to increase/decrease size */
+  .watch-buttons button{
+    display:none; /* shown from JS after typing ends */
+    padding:12px 32px;      /* <-- change to resize */
+    font-size:20px;         /* <-- change to resize */
+    font-weight:700;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    transition: transform .15s ease;
+  }
+  #yesBtn{ background:linear-gradient(45deg,#00c853,#00bcd4); color:#fff }
+  #noBtn { background:linear-gradient(45deg,#ff5252,#ff9800); color:#fff }
+
+  .watch-buttons button:active{ transform:scale(.98) }
+
+  /* small responsiveness */
+  @media (max-width:520px){
+    .celebration{ font-size:36px }
+    .watch-box{ font-size:18px; padding:14px }
+    .watch-buttons button{ padding:12px 26px; font-size:18px }
+  }
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<div class="container">
+  <div class="quote-box" id="quoteBox"></div>
+  <button id="sendBtn">Send</button>
+</div>
+
+<div class="celebration" id="celebration">
+  <div class="heart-line"></div>
+  <h1 id="birthdayText">Happy Birthday Madam Ji ❤️</h1>
+</div>
+
+<!-- bottom watch box -->
+  <div id="watchBox" class="watch-box" aria-hidden="true">
+    <div id="watchText"></div>
+    <div class="watch-buttons">
+      <button id="yesBtn">Yes ✅</button>
+      <button id="noBtn">No ❌</button>
+    </div>
+  </div>
+
+<script>
+// Quotes array
+const quotes = [
+"Happiest Birthday to you! 🎂",
+"May your day be full of surprises, 🎁and gifts, sweet treats, unforgettable moments! 🍫",
+"You're a shining light in everyone's life, ✨ and today we celebrate YOU! ❤️",
+"Keep smiling, keep dreaming 💭 and keep winning 🏆 in everything you do!",
+"May this year bring success, protection, strength, 💖 and unlimited love! 💕"
+];
+
+const quoteBox = document.getElementById("quoteBox");
+const sendBtn = document.getElementById("sendBtn");
+const celebration = document.getElementById("celebration");
+const container = document.querySelector(".container");
+
+let line=0,char=0;
+
+// Typewriter effect
+function typeWriter(){
+  if(line<quotes.length){
+    if(char<quotes[line].length){
+      quoteBox.innerText += quotes[line].charAt(char);
+      char++;
+      setTimeout(typeWriter,50);
+      quoteBox.scrollTop = quoteBox.scrollHeight;
+    } else {
+      quoteBox.innerText += "\n\n";
+      line++; char=0;
+      setTimeout(typeWriter,500);
+    }
+  } else {
+    sendBtn.style.display="inline-block";
+  }
+}
+typeWriter();
+
+// Particle function
+function createParticle() {
+  const particles = ["❤️","🎂","🕯️"];
+  const particle = document.createElement("div");
+  particle.className = "particle";
+  particle.innerText = particles[Math.floor(Math.random() * particles.length)];
+  particle.style.left = Math.random() * 100 + "vw";
+  particle.style.fontSize = (25 + Math.random() * 30) + "px"; // size bada kiya
+  particle.style.opacity = (0.7 + Math.random() * 0.3); // transparency vary
+  document.getElementById("particles").appendChild(particle);
+  setTimeout(() => particle.remove(), 8000);
+}
+
+// Dense particle effect: spawn 3 particles at a time every 200ms
+setInterval(() => {
+  createParticle();
+  createParticle();
+  createParticle();
+},1000);
+
+// Always generate particles
+setInterval(createParticle, 800);
+
+/* ---------------- send click flow ---------------- */
+sendBtn.addEventListener('click', () => {
+  // hide the input card
+  container.style.opacity = 0;
+  setTimeout(()=> container.style.display = 'none', 420);
+
+  // show celebration text (center) with zoom-out animation
+  celebration.style.display = 'block';
+
+  // now after a short delay, show the bottom watch box
+  setTimeout(showWatchBox, 4200); // ~4.2s so the main text is visible first
+});
+
+/* ---------------- watch box logic ---------------- */
+function showWatchBox(){
+  const watchBox = document.getElementById('watchBox');
+  const watchText = document.getElementById('watchText');
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+
+  // ensure visible
+  watchBox.style.display = 'block';
+  watchText.innerText = '';
+
+  const msg = "Are You Watching This Again? 👀";
+let i = 0;
+
+function typeWatch(){
+  if(i < msg.length){
+    // agar current character space hai, usko bhi add karo
+    watchText.innerHTML += msg.charAt(i) === " " ? "&nbsp;" : msg.charAt(i);
+    i++;
+    setTimeout(typeWatch, 60);
+  } else {
+    yesBtn.style.display = 'inline-block';
+    noBtn.style.display = 'inline-block';
+  }
+}
+  typeWatch();
+
+  // button actions
+  yesBtn.onclick = ()=> {
+    // go to a next page (change filename as needed)
+    window.location.href = 'index.html';
+  };
+  noBtn.onclick = ()=> {
+    // hide the watch box and keep celebration on screen
+    watchBox.style.display = 'none';
+  };
+}
+
+/* Optional: stop particle spawn after long time if needed
+setTimeout(()=> clearInterval(particleSpawner), 60000);
+*/
+</script>
+
+</body>
+</html>

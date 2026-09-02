@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Best Timeline of My Life ❤️</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      overflow-x: hidden;
+      transition: background 1s ease;
+    }
+
+    /* --- Themes --- */
+    body.magical {
+      background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 50%, #9a73ff 100%);
+    }
+    body.royal {
+      background: linear-gradient(135deg, #1c1c2b 0%, #3a0ca3 50%, #7209b7 100%);
+    }
+
+    /* Heading */
+    .magical-heading {
+      text-align: center;
+      padding: 3rem 2rem 1rem;
+      position: relative;
+      z-index: 10;
+      margin-bottom: 2rem;
+    }
+
+    .heading-main {
+      font-size: 3.5rem;
+      background: linear-gradient(45deg, #ffea00, #ff005e, #00f7ff, #ffea00);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientFlow 5s ease infinite;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+      transition: all 1s ease;
+    }
+
+    body.royal .heading-main {
+      background: linear-gradient(45deg, #f8cdda, #1d2b64, #f8cdda);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .heading-subtitle {
+      font-size: 1.8rem;
+      color: #ffea00;
+      animation: float 3s ease-in-out infinite;
+      transition: color 1s ease;
+    }
+
+    body.royal .heading-subtitle {
+      color: #f8cdda;
+    }
+
+    /* Switcher Button (Heading ke niche center me) */
+    .switcher-button {
+      display: block;
+      margin: 1rem auto 0 auto;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(45deg, #00f7ff, #ff00c8);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, background 0.5s ease;
+      z-index: 50;
+      opacity: 0.95;
+    }
+
+    .switcher-button:hover {
+      transform: scale(1.08);
+      background: linear-gradient(45deg, #ffea00, #ff00c8);
+    }
+
+    /* Timeline Container */
+    .timeline-container {
+      width: 100%;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .timeline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .timeline-item {
+      width: 300px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      padding: 1.5rem;
+      border-radius: 15px;
+      position: relative;
+      transform: scale(0.8);
+      opacity: 0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      transition: background 1s ease, color 1s ease;
+    }
+
+    .timeline-item h3 {
+      color: black;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      transition: color 1s ease;
+    }
+
+    body.royal .timeline-item h3 {
+      color: #ffe169;
+    }
+
+    /* Next Button */
+    .next-button {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 1rem 2.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(-45deg, #ffea00, #ff005e, #00f7ff, #ffea00);
+      background-size: 300% 300%;
+      color: black;
+      cursor: pointer;
+      animation: gradientFlow 5s ease infinite;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 100;
+    }
+
+    .next-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Animations */
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Floating Hearts */
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      user-select: none;
+      animation: float var(--float-time) ease-in-out infinite;
+      opacity: 0.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .heading-main {
+        font-size: 2rem;
+        padding: 0 1rem;
+      }
+      .heading-subtitle { font-size: 1.2rem; }
+      .timeline { flex-direction: column; align-items: center; }
+      .timeline-item { width: 90%; }
+      .timeline-item h3 { font-size: 1.3rem; }
+      .timeline-item p { font-size: 1rem; }
+      .next-button {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="magical">
+  <div class="magical-heading">
+    <h1 class="heading-main">Best Timeline of My Life</h1>
+    <div class="heading-subtitle">🌌 Our Magical Story 🌌</div>
+    <button class="switcher-button" onclick="toggleTheme()">Switch Theme</button>
+  </div>
+
+  <div class="timeline-container">
+    <div class="timeline"></div>
+  </div>
+
+  <button class="next-button" onclick="goToNextPage()">Next Page →</button>
+
+  <script>
+    // Floating Hearts
+    function createFloatingHearts() {
+      const hearts = ['💙','💜','💖','💫'];
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.top = `${Math.random() * 100}vh`;
+        heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+        heart.style.setProperty('--float-time', `${Math.random() * 3 + 2}s`);
+        document.body.appendChild(heart);
+      }
+    }
+
+    // Timeline Data
+    const timelineEvents = [
+      { title: "First Meetup In Game 🌟", description:"The moment changed my life", date: "September 27 2025" },
+      { title: "First Call and Message 📩", description: "The start of our beautiful journey", date: "October  2025" },
+      { title: "First Videocall 🎂", description: "A magical moment of my life because I am falling in love with You", date: "14 October 2025" },
+      { title: "I like You❤️", description: "When our hearts became one", date: "October 10 2025" },
+       { title: "First Meeting ❤️", description: "I am waiting for this moment", date: "Still Pending" },
+    ];
+
+    function createTimeline() {
+      const timeline = document.querySelector('.timeline');
+      timelineEvents.forEach((event, i) => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        item.innerHTML = `
+          <h3>${event.title}</h3>
+          <p>${event.description}</p>
+          <small>${event.date}</small>
+        `;
+        timeline.appendChild(item);
+
+        gsap.to(item, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          delay: i * 0.3,
+          ease: "back.out(1.7)"
+        });
+      });
+    }
+
+    // Next Page Transition
+    function goToNextPage() {
+      gsap.to('body', {
+        opacity: 0,
+        duration: 1,
+        ease: "power2.inOut",
+        onComplete: () => {
+          window.location.href = 'loveletter.html';
+        }
+      });
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      const body = document.body;
+      if (body.classList.contains("magical")) {
+        body.classList.remove("magical");
+        body.classList.add("royal");
+      } else {
+        body.classList.remove("royal");
+        body.classList.add("magical");
+      }
+    }
+
+    window.onload = () => {
+      createFloatingHearts();
+      createTimeline();
+    };
+  </script>
+</body>
+</html>
